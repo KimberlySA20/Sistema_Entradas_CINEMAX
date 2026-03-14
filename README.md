@@ -1,13 +1,49 @@
 # 🎬 CINEMAX
 
-## Sistema de Venta de Entradas de Cine
+## 🎥 Sistema de Venta de Entradas de Cine
+
+![CINEMAX Banner](https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=300&fit=crop&crop=center&auto=format)
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/KimberlySA20/Sistema_Entradas_CINEMAX?style=for-the-badge&logo=github)](https://github.com/KimberlySA20/Sistema_Entradas_CINEMAX)
 
-Plataforma web completa para la gestión y venta de entradas de cine con selección de asientos, snacks y múltiples sedes.
+> 🎬 **Plataforma web completa para la gestión y venta de entradas de cine con selección de asientos, snacks y múltiples sedes.**
+
+---
+
+## 🌟 Vista Rápida
+
+| 🎬 **Demostración** | 💻 **Tecnología** | 🚀 **Despliegue** |
+|-------------------|------------------|------------------|
+| ![Demo](https://img.shields.io/badge/🎬-Demo_Online-red?style=for-the-badge) | ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge) | ![GitHub Pages](https://img.shields.io/badge/🚀-GitHub_Pages-181717?style=for-the-badge&logo=github) |
+
+### 🎯 ¿Qué hace CINEMAX?
+
+```bash
+🎬 Selecciona tu película favorita
+🏛️ Elige tu sede más cercana  
+⏰ Escoge el horario perfecto
+💺 Reserva los mejores asientos
+🍿 Agrega snacks y bebidas
+💳 Paga de forma segura
+🎫 Recibe tus entradas digitales
+```
+
+---
+
+## 📊 Estadísticas del Proyecto
+
+| 📈 **Métrica** | 🎯 **Valor** |
+|---------------|-------------|
+| ⭐ **Complejidad** | Intermedio-Avanzado |
+| 📱 **Responsive** | 100% Mobile-First |
+| 🎨 **Componentes** | 50+ Reutilizables |
+| 🚀 **Performance** | Optimizado con Vite |
+| 🔒 **Seguridad** | JWT + bcrypt |
 
 ---
 
@@ -25,7 +61,23 @@ Plataforma web completa para la gestión y venta de entradas de cine con selecci
 | 👤 **Autenticación** | Registro e inicio de sesión con JWT |
 | 📦 **Historial** | Consulta de compras realizadas |
 
-## 🛠 Tech Stack
+## � Capturas de Pantalla
+
+### 🎬 Landing Page
+> 🏛️ **Selecciona tu sede CINEMAX** - Interfaz moderna con animaciones fluidas
+
+### 🎥 Cartelera de Películas  
+> 🆕 **Estrenos y clásicos** - Organizados por estado con filtros dinámicos
+
+### 💺 Selección de Asientos
+> 🎯 **Mapa interactivo** - Visualización en tiempo real de disponibilidad
+
+### 🍿 Snacks y Checkout
+> 🛒 **Proceso completo** - Desde combos hasta confirmación de compra
+
+---
+
+## �� Tech Stack
 
 ### Frontend
 - **React 18** con React Router 7
