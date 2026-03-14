@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 
 export const SeatSelection = () => {
   const navigate = useNavigate();
-  const { selectedMovie, selectedShowtime, selectedSeats, setSelectedSeats } = useBooking();
+  const { selectedMovie, selectedShowtime, selectedSeats, setSelectedSeats, getTotalTickets, getTotalPrice } = useBooking();
+  const maxSeats = getTotalTickets();
   const [seats] = useState(() => generateSeats(10, 12));
 
   if (!selectedMovie || !selectedShowtime) {
@@ -26,8 +27,8 @@ export const SeatSelection = () => {
     if (selectedSeats.includes(seatId)) {
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
     } else {
-      if (selectedSeats.length >= 8) {
-        toast.error('Máximo 8 asientos por compra');
+      if (selectedSeats.length >= maxSeats) {
+        toast.error(`Ya seleccionaste tus ${maxSeats} asientos`);
         return;
       }
       setSelectedSeats([...selectedSeats, seatId]);
@@ -145,7 +146,7 @@ export const SeatSelection = () => {
                   Asientos seleccionados: {selectedSeats.length > 0 ? selectedSeats.sort().join(', ') : 'Ninguno'}
                 </p>
                 <p className="text-xl font-bold text-purple-600">
-                  Total: ${selectedShowtime.price * selectedSeats.length}
+                  Total: ₡ {getTotalPrice().toLocaleString('es-CR', { minimumFractionDigits: 2 })}
                 </p>
               </div>
 

@@ -9,11 +9,12 @@ import { bookingsApi } from '../services/api';
 
 export const Checkout = () => {
   const navigate = useNavigate();
-  const { 
-    selectedMovie, 
-    selectedShowtime, 
+  const {
+    selectedMovie,
+    selectedShowtime,
     selectedSeats,
-    selectedSnacks, 
+    selectedSnacks,
+    tickets,
     getTotalPrice,
     clearBooking
   } = useBooking();
@@ -65,10 +66,13 @@ export const Checkout = () => {
     navigate('/confirmation');
   };
 
-  const ticketsPrice = selectedShowtime.price * selectedSeats.length;
+  const ticketsPrice = tickets.reduce((sum, t) => sum + t.price * t.quantity, 0);
   const snacksPrice = selectedSnacks.reduce((total, { snack, quantity }) => {
     return total + (snack.price * quantity);
   }, 0);
+
+  const formatColones = (amount: number) =>
+    `₡ ${amount.toLocaleString('es-CR', { minimumFractionDigits: 2 })}`;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -134,11 +138,13 @@ export const Checkout = () => {
             {/* Price Breakdown */}
             <div className="border-t border-b border-gray-200 py-6 space-y-3">
               <h3 className="font-semibold text-lg mb-4">Detalle de Compra</h3>
-              
-              <div className="flex justify-between text-gray-700">
-                <span>{selectedSeats.length} {selectedSeats.length === 1 ? 'Entrada' : 'Entradas'} × ${selectedShowtime.price}</span>
-                <span className="font-semibold">${ticketsPrice}</span>
-              </div>
+
+              {tickets.filter(t => t.quantity > 0).map((t) => (
+                <div key={t.id} className="flex justify-between text-gray-700">
+                  <span>{t.quantity}x {t.label}</span>
+                  <span className="font-semibold">{formatColones(t.price * t.quantity)}</span>
+                </div>
+              ))}
 
               {selectedSnacks.length > 0 && (
                 <>
@@ -147,21 +153,21 @@ export const Checkout = () => {
                     {selectedSnacks.map(({ snack, quantity }) => (
                       <div key={snack.id} className="flex justify-between text-gray-600 text-sm mb-1">
                         <span>{quantity}x {snack.name}</span>
-                        <span>${snack.price * quantity}</span>
+                        <span>{formatColones(snack.price * quantity)}</span>
                       </div>
                     ))}
                   </div>
-                  
+
                   <div className="flex justify-between text-gray-700">
                     <span>Subtotal Snacks</span>
-                    <span className="font-semibold">${snacksPrice}</span>
+                    <span className="font-semibold">{formatColones(snacksPrice)}</span>
                   </div>
                 </>
               )}
 
               <div className="flex justify-between text-xl font-bold text-purple-600 pt-3 border-t border-gray-200">
                 <span>Total</span>
-                <span>${getTotalPrice()}</span>
+                <span>{formatColones(getTotalPrice())}</span>
               </div>
             </div>
 
@@ -204,7 +210,7 @@ export const Checkout = () => {
                 onClick={handleConfirmPurchase}
                 className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
-                Confirmar y Pagar ${getTotalPrice()}
+                Confirmar y Pagar {formatColones(getTotalPrice())}
               </motion.button>
             </div>
           </div>
