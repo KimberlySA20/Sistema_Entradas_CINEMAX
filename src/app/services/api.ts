@@ -1,6 +1,49 @@
 const API_URL = '/api';
 
+// Importar mock API para desarrollo
+import { mockAuthApi, mockMoviesApi, mockBookingsApi } from './mockApi';
+
+// Detectar si estamos en desarrollo local
+const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  // Si es un endpoint de auth y estamos en desarrollo, usar mock
+  if (isDevelopment && endpoint.startsWith('/auth')) {
+    const body = options?.body && typeof options.body === 'string' 
+      ? JSON.parse(options.body) 
+      : {};
+    
+    if (endpoint === '/auth/login') {
+      return await mockAuthApi.login(body.email, body.password) as T;
+    } else if (endpoint === '/auth/register') {
+      return await mockAuthApi.register(body.name, body.email, body.password) as T;
+    } else if (endpoint === '/auth/profile') {
+      return await mockAuthApi.getProfile() as T;
+    }
+  }
+
+  // Mock para movies en desarrollo
+  if (isDevelopment && endpoint.startsWith('/movies')) {
+    if (endpoint === '/movies') {
+      const url = new URL(`${API_URL}${endpoint}`, window.location.origin);
+      const status = url.searchParams.get('status') || undefined;
+      return await mockMoviesApi.getAll(status) as T;
+    } else if (endpoint.match(/^\/movies\/[^\/]+$/)) {
+      const movieId = endpoint.split('/')[2];
+      return await mockMoviesApi.getById(movieId) as T;
+    } else if (endpoint.match(/^\/movies\/[^\/]+\/showtimes$/)) {
+      const movieId = endpoint.split('/')[2];
+      return await mockMoviesApi.getShowtimes(movieId) as T;
+    } else if (endpoint === '/movies/bookings') {
+      const body = options?.body && typeof options.body === 'string' 
+        ? JSON.parse(options.body) 
+        : {};
+      return await mockBookingsApi.create(body) as T;
+    } else if (endpoint === '/movies/bookings/me') {
+      return await mockBookingsApi.getMine() as T;
+    }
+  }
+
   const token = localStorage.getItem('cinemax_token');
 
   const res = await fetch(`${API_URL}${endpoint}`, {

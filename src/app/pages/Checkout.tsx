@@ -6,6 +6,7 @@ import { ArrowLeft, CreditCard, CheckCircle, Calendar, Clock, MapPin, Ticket } f
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { bookingsApi } from '../services/api';
+import { formatColones } from '../utils/format';
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ export const Checkout = () => {
               {tickets.filter(t => t.quantity > 0).map((t) => (
                 <div key={t.id} className="flex justify-between text-gray-700">
                   <span>{t.quantity}x {t.label}</span>
-                  <span className="font-semibold">{formatColones(t.price * t.quantity)}</span>
+                  <span className="font-medium text-white">{formatColones(t.price * t.quantity)}</span>
                 </div>
               ))}
 
@@ -165,7 +166,7 @@ export const Checkout = () => {
                 </>
               )}
 
-              <div className="flex justify-between text-xl font-bold text-purple-600 pt-3 border-t border-gray-200">
+              <div className="flex justify-between text-xl font-bold text-red-500 pt-3 border-t border-gray-200">
                 <span>Total</span>
                 <span>{formatColones(getTotalPrice())}</span>
               </div>
@@ -174,7 +175,7 @@ export const Checkout = () => {
             {/* Payment Method */}
             <div>
               <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-purple-600" />
+                <CreditCard className="w-5 h-5 text-red-500" />
                 Método de Pago
               </h3>
               
@@ -199,7 +200,7 @@ export const Checkout = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(-1)}
-                className="flex-1 border-2 border-gray-300 hover:border-purple-600 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
+                className="flex-1 border-2 border-gray-300 hover:border-red-500 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
               >
                 Modificar Compra
               </motion.button>
@@ -208,7 +209,7 @@ export const Checkout = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleConfirmPurchase}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                className="flex-1 bg-gradient-to-r from-red-600 to-amber-500 hover:from-red-700 hover:to-amber-600 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Confirmar y Pagar {formatColones(getTotalPrice())}
               </motion.button>

@@ -98,5 +98,5 @@ export const router = createBrowserRouter([
     element: <Landing />
   }
 ], {
-  basename: '/Sistema_Entradas_CINEMAX'
+  basename: process.env.NODE_ENV === 'production' ? '/Sistema_Entradas_CINEMAX' : '/'
 });

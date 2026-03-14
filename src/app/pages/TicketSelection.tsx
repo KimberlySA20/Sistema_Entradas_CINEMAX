@@ -3,6 +3,7 @@ import { useBooking, TicketType } from '../context/BookingContext';
 import { motion } from 'motion/react';
 import { ArrowLeft, Film, MapPin, Calendar, Clock, Shield, Minus, Plus, Armchair } from 'lucide-react';
 import { toast } from 'sonner';
+import { formatColones } from '../utils/format';
 
 export const TicketSelection = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export const TicketSelection = () => {
   };
 
   const formatColones = (amount: number) =>
-    `₡ ${amount.toLocaleString('es-CR', { minimumFractionDigits: 2 })}`;
+    `₡${amount.toLocaleString('es-CR', { minimumFractionDigits: 0 })}`;
 
   const endTime = (() => {
     const [h, m] = selectedShowtime.time.split(':').map(Number);
@@ -50,9 +51,9 @@ export const TicketSelection = () => {
   })();
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-950">
       {/* Header breadcrumb */}
-      <div className="bg-gray-800 text-white">
+      <div className="bg-gray-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-2 text-sm">
           <button onClick={() => navigate('/cartelera')} className="text-gray-400 hover:text-white transition-colors">
             HOME
@@ -62,7 +63,7 @@ export const TicketSelection = () => {
             CARTELERA
           </button>
           <span className="text-gray-500">&gt;</span>
-          <span className="text-cyan-400 font-medium">DETALLE DE PELÍCULA</span>
+          <span className="text-red-400 font-medium">DETALLE DE PELÍCULA</span>
         </div>
       </div>
 
@@ -70,14 +71,14 @@ export const TicketSelection = () => {
         {/* Back button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center gap-2 mb-6 text-gray-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Volver
         </button>
 
         {/* Title */}
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-8 tracking-tight">
+        <h1 className="text-3xl font-extrabold text-white mb-8 tracking-tight">
           DETALLE DE PELÍCULA
         </h1>
 
@@ -85,38 +86,38 @@ export const TicketSelection = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-md overflow-hidden mb-8"
+          className="bg-gray-900 rounded-xl shadow-md overflow-hidden mb-8"
         >
           {/* Top colored bar */}
-          <div className="h-1.5 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500" />
+          <div className="h-1.5 bg-gradient-to-r from-red-600 to-amber-500" />
 
           <div className="p-6 md:p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left column */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <Film className="w-5 h-5 text-cyan-600 mt-0.5 shrink-0" />
+                  <Film className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Cine</p>
-                    <p className="font-bold text-gray-900">CINEMAX</p>
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Cine</p>
+                    <p className="font-bold text-white">CINEMAX</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <div className="w-5 h-5 mt-0.5 shrink-0 flex items-center justify-center">
-                    <span className="text-cyan-600 text-lg">🎬</span>
+                    <span className="text-red-500 text-lg">🎬</span>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Película</p>
-                    <p className="font-bold text-gray-900">{selectedMovie.title}</p>
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Película</p>
+                    <p className="font-bold text-white">{selectedMovie.title}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-cyan-600 mt-0.5 shrink-0" />
+                  <MapPin className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Sala</p>
-                    <p className="font-bold text-gray-900">{selectedShowtime.room}</p>
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Sala</p>
+                    <p className="font-bold text-white">{selectedShowtime.room}</p>
                   </div>
                 </div>
               </div>
@@ -124,10 +125,10 @@ export const TicketSelection = () => {
               {/* Right column */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-cyan-600 mt-0.5 shrink-0" />
+                  <Calendar className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Fecha</p>
-                    <p className="font-bold text-gray-900">
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Fecha</p>
+                    <p className="font-bold text-white">
                       {new Date(selectedShowtime.date + 'T12:00:00').toLocaleDateString('es-CR', {
                         weekday: 'long',
                         day: 'numeric',
@@ -139,20 +140,20 @@ export const TicketSelection = () => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-cyan-600 mt-0.5 shrink-0" />
+                  <Clock className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Tanda</p>
-                    <p className="font-bold text-gray-900">
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Tanda</p>
+                    <p className="font-bold text-white">
                       {selectedShowtime.time} p.m. a {endTime} p.m.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-cyan-600 mt-0.5 shrink-0" />
+                  <Shield className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-semibold text-cyan-600 uppercase tracking-wider">Censura</p>
-                    <p className="font-bold text-gray-900">{selectedMovie.rating}</p>
+                    <p className="text-xs font-semibold text-red-500 uppercase tracking-wider">Censura</p>
+                    <p className="font-bold text-white">{selectedMovie.rating}</p>
                   </div>
                 </div>
               </div>
@@ -160,7 +161,7 @@ export const TicketSelection = () => {
           </div>
 
           {/* Bottom accent */}
-          <div className="h-1 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500" />
+          <div className="h-1 bg-gradient-to-r from-red-600 to-amber-500" />
         </motion.div>
 
         {/* Ticket Selection */}
@@ -168,15 +169,15 @@ export const TicketSelection = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-white rounded-xl shadow-md overflow-hidden mb-8"
+          className="bg-gray-900 rounded-xl shadow-md overflow-hidden mb-8"
         >
           <div className="p-6 md:p-8">
             {/* Headers */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-extrabold text-cyan-700 uppercase tracking-wider">
+              <h2 className="text-lg font-extrabold text-red-500 uppercase tracking-wider">
                 Tipo de Entrada
               </h2>
-              <h2 className="text-lg font-extrabold text-cyan-700 uppercase tracking-wider">
+              <h2 className="text-lg font-extrabold text-red-500 uppercase tracking-wider">
                 Cantidad
               </h2>
             </div>
@@ -186,25 +187,25 @@ export const TicketSelection = () => {
               {tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="flex items-center justify-between bg-gray-50 rounded-lg px-5 py-4 border border-gray-200"
+                  className="flex items-center justify-between bg-gray-800 rounded-lg px-5 py-4 border border-gray-700"
                 >
-                  <span className="font-semibold text-gray-800 text-sm md:text-base">
+                  <span className="font-semibold text-gray-300 text-sm md:text-base">
                     *{ticket.label} {formatColones(ticket.price)}
                   </span>
 
-                  <div className="flex items-center gap-0 rounded-lg overflow-hidden border-2 border-green-500">
+                  <div className="flex items-center gap-0 rounded-lg overflow-hidden border-2 border-red-500">
                     <button
                       onClick={() => updateQuantity(ticket.id, -1)}
-                      className="bg-green-500 hover:bg-green-600 text-white w-12 h-12 flex items-center justify-center text-2xl font-bold transition-colors"
+                      className="bg-red-600 hover:bg-red-700 text-white w-12 h-12 flex items-center justify-center text-2xl font-bold transition-colors"
                     >
                       <Minus className="w-5 h-5" />
                     </button>
-                    <span className="w-14 h-12 flex items-center justify-center text-2xl font-bold text-gray-800 bg-white">
+                    <span className="w-14 h-12 flex items-center justify-center text-2xl font-bold text-white bg-gray-800">
                       {ticket.quantity}
                     </span>
                     <button
                       onClick={() => updateQuantity(ticket.id, 1)}
-                      className="bg-green-500 hover:bg-green-600 text-white w-12 h-12 flex items-center justify-center text-2xl font-bold transition-colors"
+                      className="bg-red-600 hover:bg-red-700 text-white w-12 h-12 flex items-center justify-center text-2xl font-bold transition-colors"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -214,7 +215,7 @@ export const TicketSelection = () => {
             </div>
 
             {/* Note */}
-            <p className="text-cyan-600 text-sm mt-4 font-medium">*CINEMAX</p>
+            <p className="text-red-400 text-sm mt-4 font-medium">*CINEMAX</p>
           </div>
         </motion.div>
 
@@ -223,7 +224,7 @@ export const TicketSelection = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl shadow-md overflow-hidden mb-8"
+          className="bg-gray-900 rounded-xl shadow-md overflow-hidden mb-8"
         >
           <div className="p-6 md:p-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -232,7 +233,7 @@ export const TicketSelection = () => {
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
                     Cantidad de Entradas
                   </p>
-                  <div className="bg-cyan-500 text-white text-2xl font-bold w-14 h-14 rounded-lg flex items-center justify-center">
+                  <div className="bg-red-600 text-white text-2xl font-bold w-14 h-14 rounded-lg flex items-center justify-center">
                     {getTotalTickets()}
                   </div>
                 </div>
@@ -241,9 +242,9 @@ export const TicketSelection = () => {
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
                     Total
                   </p>
-                  <div className="bg-gray-800 text-white text-lg font-bold px-6 h-14 rounded-lg flex items-center justify-center min-w-[200px]">
+                  <div className="bg-gradient-to-r from-red-600 to-amber-500 text-white text-lg font-bold px-6 h-14 rounded-lg flex items-center justify-center min-w-[200px]">
                     {formatColones(getTotalPrice())}
-                    <span className="text-xs ml-2 text-gray-300 font-normal">IVA incluido</span>
+                    <span className="text-xs ml-2 text-amber-200 font-normal">IVA incluido</span>
                   </div>
                 </div>
               </div>
@@ -270,7 +271,7 @@ export const TicketSelection = () => {
             whileTap={{ scale: 0.98 }}
             onClick={handleContinue}
             disabled={getTotalTickets() === 0}
-            className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 disabled:from-gray-400 disabled:to-gray-400 text-white px-8 py-4 rounded-lg font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-3 shadow-lg"
+            className="flex-1 bg-gradient-to-r from-red-600 to-amber-500 hover:from-red-700 hover:to-amber-600 disabled:from-gray-400 disabled:to-gray-400 text-white px-8 py-4 rounded-lg font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-3 shadow-lg"
           >
             <Armchair className="w-6 h-6" />
             Seleccionar Asientos

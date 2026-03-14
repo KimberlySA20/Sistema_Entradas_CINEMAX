@@ -90,6 +90,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const getTotalPrice = () => {
     const ticketsPrice = tickets.reduce((sum, t) => sum + t.price * t.quantity, 0);
+    // Los snacks ahora están en colones directamente
     const snacksPrice = selectedSnacks.reduce((total, { snack, quantity }) => total + snack.price * quantity, 0);
     return ticketsPrice + snacksPrice;
   };

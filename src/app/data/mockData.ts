@@ -151,17 +151,17 @@ export const showtimes: Showtime[] = generateShowtimes();
 export const snacks: Snack[] = [
   {
     id: 'sn1',
-    name: 'Pochoclos Grandes',
-    description: 'Pochoclos calientes con manteca',
-    price: 5,
+    name: 'Palomitas Grandes',
+    description: 'Palomitas calientes con manteca',
+    price: 2750,
     image: 'https://images.unsplash.com/photo-1768582870566-d1ea815a7545?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb3Bjb3JuJTIwY2luZW1hJTIwc25hY2tzfGVufDF8fHx8MTc3MzM3NTA2Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'popcorn'
   },
   {
     id: 'sn2',
-    name: 'Pochoclos Medianos',
-    description: 'Pochoclos calientes con manteca',
-    price: 4,
+    name: 'Palomitas Medianas',
+    description: 'Palomitas calientes con manteca',
+    price: 2200,
     image: 'https://images.unsplash.com/photo-1768582870566-d1ea815a7545?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb3Bjb3JuJTIwY2luZW1hJTIwc25hY2tzfGVufDF8fHx8MTc3MzM3NTA2Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'popcorn'
   },
@@ -169,7 +169,7 @@ export const snacks: Snack[] = [
     id: 'sn3',
     name: 'Gaseosa Grande',
     description: 'Bebida fría 700ml',
-    price: 4,
+    price: 2200,
     image: 'https://images.unsplash.com/photo-1629257657047-9b40cd435eb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2RhJTIwZHJpbmslMjBjdXB8ZW58MXx8fHwxNzczMzU5NzM0fDA&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'drinks'
   },
@@ -177,23 +177,23 @@ export const snacks: Snack[] = [
     id: 'sn4',
     name: 'Gaseosa Mediana',
     description: 'Bebida fría 500ml',
-    price: 3,
+    price: 1650,
     image: 'https://images.unsplash.com/photo-1629257657047-9b40cd435eb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2RhJTIwZHJpbmslMjBjdXB8ZW58MXx8fHwxNzczMzU5NzM0fDA&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'drinks'
   },
   {
     id: 'sn5',
     name: 'Combo Grande',
-    description: 'Pochoclos grandes + 2 gaseosas grandes',
-    price: 12,
+    description: 'Palomitas grandes + 2 gaseosas grandes',
+    price: 6600,
     image: 'https://images.unsplash.com/photo-1768582870566-d1ea815a7545?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb3Bjb3JuJTIwY2luZW1hJTIwc25hY2tzfGVufDF8fHx8MTc3MzM3NTA2Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'combos'
   },
   {
     id: 'sn6',
     name: 'Combo Pareja',
-    description: 'Pochoclos medianos + 2 gaseosas medianas',
-    price: 10,
+    description: 'Palomitas medianas + 2 gaseosas medianas',
+    price: 5500,
     image: 'https://images.unsplash.com/photo-1768582870566-d1ea815a7545?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb3Bjb3JuJTIwY2luZW1hJTIwc25hY2tzfGVufDF8fHx8MTc3MzM3NTA2Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     category: 'combos'
   }

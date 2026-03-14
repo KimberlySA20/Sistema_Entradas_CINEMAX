@@ -16,7 +16,8 @@ export const Home = () => {
     moviesApi.getAll()
       .then((data) => {
         if (data.length > 0) {
-          const mapped = data.map((m: any) => ({ ...m, id: m._id }));
+          // Los datos vienen con _id, necesitamos mapear a id para compatibilidad
+          const mapped = data.map((m: any) => ({ ...m, id: m._id || m.id }));
           setMoviesList(mapped);
         }
       })

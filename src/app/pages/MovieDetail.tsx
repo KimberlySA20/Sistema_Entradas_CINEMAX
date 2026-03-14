@@ -21,12 +21,12 @@ export const MovieDetail = () => {
   useEffect(() => {
     if (!id) return;
     moviesApi.getById(id)
-      .then((data) => setMovie({ ...data, id: data._id }))
+      .then((data) => setMovie({ ...data, id: data._id || data.id }))
       .catch(() => {});
     moviesApi.getShowtimes(id)
       .then((data) => {
         if (data.length > 0) {
-          setAllShowtimes(data.map((s: any) => ({ ...s, id: s._id, movieId: s.movieId })));
+          setAllShowtimes(data.map((s: any) => ({ ...s, id: s._id || s.id, movieId: s.movieId })));
         }
       })
       .catch(() => {});

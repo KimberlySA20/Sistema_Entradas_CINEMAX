@@ -20,7 +20,7 @@ export default defineConfig({
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 
-  base: '/Sistema_Entradas_CINEMAX/',
+  base: process.env.NODE_ENV === 'production' ? '/Sistema_Entradas_CINEMAX/' : '/',
 
   server: {
     proxy: {
