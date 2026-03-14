@@ -130,17 +130,17 @@ export const MovieDetail = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-900 rounded-xl shadow-xl shadow-black/30 p-6 mb-8 flex flex-col sm:flex-row gap-6 border border-gray-800"
+          className="bg-gray-900 rounded-xl shadow-xl shadow-black/30 p-4 sm:p-6 mb-8 flex flex-col sm:flex-row gap-4 sm:gap-6 border border-gray-800"
         >
           <img
             src={movie.poster}
             alt={movie.title}
-            className="w-40 h-56 object-cover rounded-lg shadow-lg shadow-black/50 shrink-0"
+            className="w-32 h-44 sm:w-40 sm:h-56 object-cover rounded-lg shadow-lg shadow-black/50 shrink-0 mx-auto sm:mx-0"
           />
 
-          <div className="flex-1">
-            <h3 className="text-2xl font-bold text-white mb-4">{movie.title}</h3>
-            <div className="space-y-2">
+          <div className="flex-1 text-center sm:text-left">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">{movie.title}</h3>
+            <div className="space-y-2 text-sm sm:text-base">
               <p>
                 <span className="text-red-400 font-semibold">Censura: </span>
                 <span className="text-gray-300">{movie.rating}</span>
@@ -160,7 +160,7 @@ export const MovieDetail = () => {
                 </p>
               )}
             </div>
-            <p className="text-gray-500 text-sm mt-4 leading-relaxed">{movie.synopsis}</p>
+            <p className="text-gray-500 text-xs sm:text-sm mt-3 sm:mt-4 leading-relaxed">{movie.synopsis}</p>
           </div>
         </motion.div>
 
@@ -173,11 +173,11 @@ export const MovieDetail = () => {
               transition={{ delay: 0.1 }}
               className="mb-8"
             >
-              <h3 className="text-lg font-semibold text-gray-300 mb-3">¿Qué día quieres ver la película?</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-300 mb-3">¿Qué día quieres ver la película?</h3>
               <select
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full bg-gray-900 border-2 border-gray-700 rounded-lg px-4 py-3 text-white font-medium text-lg focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all cursor-pointer appearance-none"
+                className="w-full bg-gray-900 border-2 border-gray-700 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white font-medium text-sm sm:text-lg focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all cursor-pointer appearance-none"
                 style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ef4444' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
               >
                 {availableDates.map((date) => {
@@ -204,28 +204,28 @@ export const MovieDetail = () => {
               className="space-y-4"
             >
               {Object.keys(groupedByType).length === 0 ? (
-                <div className="bg-gray-900 rounded-xl shadow-md p-8 text-center border border-gray-800">
-                  <p className="text-gray-500">No hay funciones disponibles para esta fecha</p>
+                <div className="bg-gray-900 rounded-xl shadow-md p-4 sm:p-8 text-center border border-gray-800">
+                  <p className="text-gray-500 text-sm sm:text-base">No hay funciones disponibles para esta fecha</p>
                 </div>
               ) : (
                 Object.entries(groupedByType).map(([type, times]) => (
                   <div key={type} className="bg-gray-900 rounded-xl shadow-xl shadow-black/20 overflow-hidden border border-gray-800">
-                    <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-6 py-3">
-                      <span className="font-bold text-sm uppercase tracking-wider">{type}</span>
+                    <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-4 sm:px-6 py-2 sm:py-3">
+                      <span className="font-bold text-xs sm:text-sm uppercase tracking-wider">{type}</span>
                     </div>
-                    <div className="p-5">
-                      <div className="flex flex-wrap gap-4">
+                    <div className="p-3 sm:p-5">
+                      <div className="flex flex-wrap gap-2 sm:gap-4 justify-center sm:justify-start">
                         {times.map((showtime) => (
                           <motion.button
                             key={showtime.id}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleShowtimeSelect(showtime)}
-                            className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors group"
+                            className="flex items-center gap-1 sm:gap-2 text-amber-400 hover:text-amber-300 transition-colors group text-xs sm:text-base"
                           >
-                            <Clock className="w-4 h-4 text-gray-600 group-hover:text-red-400" />
-                            <span className="text-lg font-bold">{showtime.time} p.m.</span>
-                            <span className="text-gray-600 text-sm">(Selecciona una tanda)</span>
+                            <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-red-400" />
+                            <span className="font-bold text-sm sm:text-lg">{showtime.time} p.m.</span>
+                            <span className="text-gray-600 text-xs sm:text-sm hidden sm:inline">(Selecciona una tanda)</span>
                           </motion.button>
                         ))}
                       </div>

@@ -20,11 +20,26 @@ export default defineConfig({
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 
+  base: '/Sistema_Entradas_CINEMAX/',
+
   server: {
     proxy: {
       '/api': {
         target: 'http://localhost:5001',
         changeOrigin: true,
+      },
+    },
+  },
+
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+        },
       },
     },
   },
