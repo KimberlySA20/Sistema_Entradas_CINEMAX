@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEMAX - Página no encontrada</title>
+    <script>
+        // Redirigir todas las rutas al index.html para que React Router las maneje
+        sessionStorage.setItem('redirect', location.pathname);
+        location.pathname = '/Sistema_Entradas_CINEMAX/';
+    </script>
+</head>
+<body>
+    <div>
+        <h1>Redirigiendo a CINEMAX...</h1>
+        <p>Si no eres redirigido automáticamente, <a href="/Sistema_Entradas_CINEMAX/">haz clic aquí</a>.</p>
+    </div>
+</body>
+</html>

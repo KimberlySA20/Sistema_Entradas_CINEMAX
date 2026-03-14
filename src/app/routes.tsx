@@ -92,5 +92,11 @@ export const router = createBrowserRouter([
         <Purchases />
       </Layout>
     )
+  },
+  {
+    path: '*',
+    element: <Landing />
   }
-]);
+], {
+  basename: '/Sistema_Entradas_CINEMAX'
+});
