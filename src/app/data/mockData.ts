@@ -90,10 +90,13 @@ export const movies: Movie[] = [
   }
 ];
 
-// Helper to generate showtimes across 5 dates for each movie per cinema
+// Helper to generate showtimes across 4 dates for each movie per cinema (current day + 3 days after)
 const generateShowtimes = (): Showtime[] => {
   const cinemas = ['San Carlos', 'Alajuela Plaza Real', 'Multiplaza Escazú'];
-  const dates = ['2026-03-14', '2026-03-15', '2026-03-16', '2026-03-17', '2026-03-18'];
+  const dates = [
+    '2026-03-14', // Día actual
+    '2026-03-15', '2026-03-16', '2026-03-17'  // 3 días después
+  ];
   const result: Showtime[] = [];
   let counter = 1;
 

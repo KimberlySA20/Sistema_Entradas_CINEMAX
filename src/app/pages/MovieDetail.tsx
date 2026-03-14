@@ -48,6 +48,19 @@ export const MovieDetail = () => {
     return [...dateSet].sort();
   }, [cinemaShowtimes]);
 
+  // Función para categorizar las fechas
+  const getDateCategory = (date: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetDate = new Date(date + 'T12:00:00');
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Hoy';
+    if (diffDays === 1) return 'Mañana';
+    return `En ${diffDays} día${diffDays > 1 ? 's' : ''}`;
+  };
+
   useEffect(() => {
     if (availableDates.length > 0 && (!selectedDate || !availableDates.includes(selectedDate))) {
       setSelectedDate(availableDates[0]);
@@ -167,13 +180,19 @@ export const MovieDetail = () => {
                 className="w-full bg-gray-900 border-2 border-gray-700 rounded-lg px-4 py-3 text-white font-medium text-lg focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all cursor-pointer appearance-none"
                 style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ef4444' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
               >
-                {availableDates.map((date) => (
-                  <option key={date} value={date}>
-                    {new Date(date + 'T12:00:00').toLocaleDateString('es-CR', {
-                      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-                    }).toUpperCase()}
-                  </option>
-                ))}
+                {availableDates.map((date) => {
+                  const dateObj = new Date(date + 'T12:00:00');
+                  const formattedDate = dateObj.toLocaleDateString('es-CR', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+                  }).toUpperCase();
+                  const category = getDateCategory(date);
+                  
+                  return (
+                    <option key={date} value={date}>
+                      {category} - {formattedDate}
+                    </option>
+                  );
+                })}
               </select>
             </motion.div>
 
