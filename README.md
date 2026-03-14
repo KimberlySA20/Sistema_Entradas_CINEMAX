@@ -227,6 +227,5 @@ CINEMAX/
 
 <div align="center">
 
-Hecho con ❤️ para CINEMAX
 
 </div>

@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 import { Home } from './pages/Home';
 import { Landing } from './pages/Landing';
 import { MovieDetail } from './pages/MovieDetail';
+import { TicketSelection } from './pages/TicketSelection';
 import { SeatSelection } from './pages/SeatSelection';
 import { SnackSelection } from './pages/SnackSelection';
 import { Checkout } from './pages/Checkout';
@@ -37,6 +38,14 @@ export const router = createBrowserRouter([
     element: (
       <Layout>
         <MovieDetail />
+      </Layout>
+    )
+  },
+  {
+    path: '/tickets',
+    element: (
+      <Layout>
+        <TicketSelection />
       </Layout>
     )
   },

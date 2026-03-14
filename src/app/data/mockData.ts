@@ -90,30 +90,63 @@ export const movies: Movie[] = [
   }
 ];
 
-export const showtimes: Showtime[] = [
-  // Código Oscuro
-  { id: 's1', movieId: '1', date: '2026-03-15', time: '14:30', room: 'San Carlos', language: 'Español', format: '2D', price: 8 },
-  { id: 's2', movieId: '1', date: '2026-03-15', time: '17:00', room: 'San Carlos', language: 'Español', format: '2D', price: 8 },
-  { id: 's3', movieId: '1', date: '2026-03-15', time: '20:00', room: 'Alajuela Plaza Real', language: 'Subtitulado', format: '3D', price: 12 },
-  { id: 's4', movieId: '1', date: '2026-03-15', time: '22:30', room: 'Multiplaza Escazú', language: 'Subtitulado', format: '2D', price: 8 },
+// Helper to generate showtimes across 4 dates for each movie per cinema (current day + 3 days after)
+const generateShowtimes = (): Showtime[] => {
+  const cinemas = ['San Carlos', 'Alajuela Plaza Real', 'Multiplaza Escazú'];
+  const dates = [
+    '2026-03-14', // Día actual
+    '2026-03-15', '2026-03-16', '2026-03-17'  // 3 días después
+  ];
+  const result: Showtime[] = [];
+  let counter = 1;
 
-  // La Sombra Eterna
-  { id: 's5', movieId: '2', date: '2026-03-15', time: '15:00', room: 'San Carlos', language: 'Español', format: '2D', price: 8 },
-  { id: 's6', movieId: '2', date: '2026-03-15', time: '18:30', room: 'Alajuela Plaza Real', language: 'Subtitulado', format: '2D', price: 8 },
-  { id: 's7', movieId: '2', date: '2026-03-15', time: '21:00', room: 'Multiplaza Escazú', language: 'Español', format: '2D', price: 8 },
-  { id: 's8', movieId: '2', date: '2026-03-15', time: '23:30', room: 'San Carlos', language: 'Subtitulado', format: '2D', price: 8 },
+  // Movie 1 - Código Oscuro
+  for (const date of dates) {
+    for (const cinema of cinemas) {
+      result.push(
+        { id: `s${counter++}`, movieId: '1', date, time: '13:00', room: cinema, language: 'Doblada', format: '2D', price: 3400 },
+        { id: `s${counter++}`, movieId: '1', date, time: '16:30', room: cinema, language: 'Subtitulada', format: '2D', price: 3400 },
+        { id: `s${counter++}`, movieId: '1', date, time: '20:00', room: cinema, language: 'Doblada', format: '3D', price: 4200 },
+      );
+    }
+  }
 
-  // Amor en Primavera
-  { id: 's9', movieId: '3', date: '2026-03-15', time: '13:00', room: 'Alajuela Plaza Real', language: 'Español', format: '2D', price: 8 },
-  { id: 's10', movieId: '3', date: '2026-03-15', time: '16:00', room: 'Alajuela Plaza Real', language: 'Español', format: '2D', price: 8 },
-  { id: 's11', movieId: '3', date: '2026-03-15', time: '19:00', room: 'Multiplaza Escazú', language: 'Subtitulado', format: '2D', price: 8 },
-  { id: 's12', movieId: '3', date: '2026-03-15', time: '21:30', room: 'San Carlos', language: 'Español', format: '2D', price: 8 },
+  // Movie 2 - La Sombra Eterna
+  for (const date of dates) {
+    for (const cinema of cinemas) {
+      result.push(
+        { id: `s${counter++}`, movieId: '2', date, time: '14:00', room: cinema, language: 'Doblada', format: '2D', price: 3400 },
+        { id: `s${counter++}`, movieId: '2', date, time: '18:00', room: cinema, language: 'Subtitulada', format: '2D', price: 3400 },
+        { id: `s${counter++}`, movieId: '2', date, time: '21:30', room: cinema, language: 'Doblada', format: '2D', price: 3400 },
+      );
+    }
+  }
 
-  // Galaxia 2099
-  { id: 's13', movieId: '4', date: '2026-03-20', time: '15:00', room: 'Multiplaza Escazú', language: 'Español', format: '3D', price: 12 },
-  { id: 's14', movieId: '4', date: '2026-03-20', time: '18:00', room: 'San Carlos', language: 'Subtitulado', format: '3D', price: 12 },
-  { id: 's15', movieId: '4', date: '2026-03-20', time: '21:00', room: 'Alajuela Plaza Real', language: 'Español', format: '2D', price: 8 },
-];
+  // Movie 3 - Amor en Primavera
+  for (const date of dates) {
+    for (const cinema of cinemas) {
+      result.push(
+        { id: `s${counter++}`, movieId: '3', date, time: '13:30', room: cinema, language: 'Doblada', format: '2D', price: 3400 },
+        { id: `s${counter++}`, movieId: '3', date, time: '17:00', room: cinema, language: 'Subtitulada', format: '2D', price: 3400 },
+      );
+    }
+  }
+
+  // Movie 4 - Galaxia 2099
+  for (const date of dates) {
+    for (const cinema of cinemas) {
+      result.push(
+        { id: `s${counter++}`, movieId: '4', date, time: '15:00', room: cinema, language: 'Doblada', format: '3D', price: 4200 },
+        { id: `s${counter++}`, movieId: '4', date, time: '19:00', room: cinema, language: 'Subtitulada', format: '3D', price: 4200 },
+        { id: `s${counter++}`, movieId: '4', date, time: '22:00', room: cinema, language: 'Doblada', format: '2D', price: 3400 },
+      );
+    }
+  }
+
+  return result;
+};
+
+export const showtimes: Showtime[] = generateShowtimes();
 
 export const snacks: Snack[] = [
   {

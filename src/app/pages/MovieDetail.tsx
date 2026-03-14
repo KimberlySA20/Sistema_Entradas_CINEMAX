@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { movies as mockMovies, showtimes as mockShowtimes, Movie, Showtime } from '../data/mockData';
-import { Clock, Calendar, Film as FilmIcon, ArrowLeft } from 'lucide-react';
+import { Clock, ArrowLeft } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'motion/react';
@@ -11,10 +11,12 @@ import { moviesApi } from '../services/api';
 export const MovieDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { setSelectedShowtime } = useBooking();
+  const { selectedCinema, setSelectedMovie, setSelectedShowtime } = useBooking();
   const { user } = useAuth();
   const [movie, setMovie] = useState<Movie | undefined>(mockMovies.find(m => m.id === id));
-  const [movieShowtimes, setMovieShowtimes] = useState<Showtime[]>(mockShowtimes.filter(s => s.movieId === id));
+  const [allShowtimes, setAllShowtimes] = useState<Showtime[]>(mockShowtimes.filter(s => s.movieId === id));
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [dateScrollIndex] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -24,163 +26,222 @@ export const MovieDetail = () => {
     moviesApi.getShowtimes(id)
       .then((data) => {
         if (data.length > 0) {
-          setMovieShowtimes(data.map((s: any) => ({ ...s, id: s._id, movieId: s.movieId })));
+          setAllShowtimes(data.map((s: any) => ({ ...s, id: s._id, movieId: s.movieId })));
         }
       })
       .catch(() => {});
   }, [id]);
 
+  const cinemaShowtimes = useMemo(() => {
+    if (!selectedCinema) return allShowtimes;
+    const cinemaNameMap: Record<string, string> = {
+      'san-carlos': 'San Carlos',
+      'alajuela': 'Alajuela Plaza Real',
+      'escazu': 'Multiplaza Escazú',
+    };
+    const cinemaRoom = cinemaNameMap[selectedCinema.id] || '';
+    return allShowtimes.filter(s => s.room === cinemaRoom);
+  }, [allShowtimes, selectedCinema]);
+
+  const availableDates = useMemo(() => {
+    const dateSet = new Set(cinemaShowtimes.map(s => s.date));
+    return [...dateSet].sort();
+  }, [cinemaShowtimes]);
+
+  // Función para categorizar las fechas
+  const getDateCategory = (date: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetDate = new Date(date + 'T12:00:00');
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Hoy';
+    if (diffDays === 1) return 'Mañana';
+    return `En ${diffDays} día${diffDays > 1 ? 's' : ''}`;
+  };
+
+  useEffect(() => {
+    if (availableDates.length > 0 && (!selectedDate || !availableDates.includes(selectedDate))) {
+      setSelectedDate(availableDates[0]);
+    }
+  }, [availableDates, selectedDate]);
+
+  const filteredShowtimes = cinemaShowtimes.filter(s => s.date === selectedDate);
+
+  const groupedByType = filteredShowtimes.reduce((acc, showtime) => {
+    const key = `CINEMAX ${showtime.format}, ${showtime.language}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(showtime);
+    return acc;
+  }, {} as Record<string, Showtime[]>);
+
   if (!movie) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-gray-600">Película no encontrada</p>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <p className="text-xl text-gray-500">Película no encontrada</p>
       </div>
     );
   }
 
-  const handleShowtimeSelect = (showtime: typeof movieShowtimes[0]) => {
+  const handleShowtimeSelect = (showtime: Showtime) => {
     if (!user) {
       toast.error('Debes iniciar sesión para comprar entradas');
       navigate('/login');
       return;
     }
-
+    setSelectedMovie(movie);
     setSelectedShowtime(showtime);
-    navigate('/seats');
+    navigate('/tickets');
   };
 
-  const groupedByDate = movieShowtimes.reduce((acc, showtime) => {
-    if (!acc[showtime.date]) {
-      acc[showtime.date] = [];
-    }
-    acc[showtime.date].push(showtime);
-    return acc;
-  }, {} as Record<string, typeof movieShowtimes>);
+  const formatDuration = (mins: number) => {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return `${h}:${String(m).padStart(2, '0')} horas`;
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="relative h-[500px] bg-black overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={movie.poster} 
-            alt={movie.title}
-            className="w-full h-full object-cover opacity-40 blur-sm scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end pb-12">
-          <div className="flex flex-col md:flex-row gap-8 w-full">
-            <motion.img 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              src={movie.poster} 
-              alt={movie.title}
-              className="w-64 rounded-lg shadow-2xl"
-            />
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex-1 text-white"
-            >
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-2 mb-4 text-purple-300 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                Volver a cartelera
-              </button>
-
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{movie.title}</h1>
-              
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <span className="bg-purple-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  {movie.genre}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
-                  <span>{movie.duration} minutos</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FilmIcon className="w-5 h-5" />
-                  <span>{movie.rating}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5" />
-                  <span>{new Date(movie.releaseDate).toLocaleDateString('es-ES')}</span>
-                </div>
-              </div>
-
-              <p className="text-gray-300 text-lg max-w-3xl">{movie.synopsis}</p>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-gray-950">
+      {/* Breadcrumb */}
+      <div className="bg-black/50 border-b border-gray-800">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-2 text-sm">
+          <button onClick={() => navigate('/')} className="text-gray-500 hover:text-white transition-colors">HOME</button>
+          <span className="text-gray-700">&gt;</span>
+          <span className="text-red-400 font-medium">DETALLE DE PELÍCULA</span>
         </div>
       </div>
 
-      {/* Showtimes Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-bold mb-8">Horarios Disponibles</h2>
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <button
+          onClick={() => navigate('/cartelera')}
+          className="flex items-center gap-2 mb-6 text-gray-500 hover:text-amber-400 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Volver a cartelera
+        </button>
 
-        {movie.status === 'coming-soon' ? (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-            <p className="text-yellow-800 text-lg">
+        <h1 className="text-3xl font-black text-white mb-2 tracking-tight">DETALLE DE PELÍCULA</h1>
+        <div className="h-1 bg-gradient-to-r from-red-600 to-amber-500 mb-8 rounded" />
+
+        <h2 className="text-lg font-bold text-red-500 uppercase tracking-wider mb-6">Comprar Entradas</h2>
+
+        {/* Movie Info Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gray-900 rounded-xl shadow-xl shadow-black/30 p-6 mb-8 flex flex-col sm:flex-row gap-6 border border-gray-800"
+        >
+          <img
+            src={movie.poster}
+            alt={movie.title}
+            className="w-40 h-56 object-cover rounded-lg shadow-lg shadow-black/50 shrink-0"
+          />
+
+          <div className="flex-1">
+            <h3 className="text-2xl font-bold text-white mb-4">{movie.title}</h3>
+            <div className="space-y-2">
+              <p>
+                <span className="text-red-400 font-semibold">Censura: </span>
+                <span className="text-gray-300">{movie.rating}</span>
+              </p>
+              <p>
+                <span className="text-red-400 font-semibold">Duración: </span>
+                <span className="text-gray-300">{formatDuration(movie.duration)}</span>
+              </p>
+              <p>
+                <span className="text-red-400 font-semibold">Género: </span>
+                <span className="text-gray-300">{movie.genre}</span>
+              </p>
+              {selectedCinema && (
+                <p>
+                  <span className="text-red-400 font-semibold">Cine: </span>
+                  <span className="text-gray-300">{selectedCinema.location}</span>
+                </p>
+              )}
+            </div>
+            <p className="text-gray-500 text-sm mt-4 leading-relaxed">{movie.synopsis}</p>
+          </div>
+        </motion.div>
+
+        {/* Date Selector */}
+        {movie.status !== 'coming-soon' && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mb-8"
+            >
+              <h3 className="text-lg font-semibold text-gray-300 mb-3">¿Qué día quieres ver la película?</h3>
+              <select
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-full bg-gray-900 border-2 border-gray-700 rounded-lg px-4 py-3 text-white font-medium text-lg focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all cursor-pointer appearance-none"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ef4444' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+              >
+                {availableDates.map((date) => {
+                  const dateObj = new Date(date + 'T12:00:00');
+                  const formattedDate = dateObj.toLocaleDateString('es-CR', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+                  }).toUpperCase();
+                  const category = getDateCategory(date);
+                  
+                  return (
+                    <option key={date} value={date}>
+                      {category} - {formattedDate}
+                    </option>
+                  );
+                })}
+              </select>
+            </motion.div>
+
+            {/* Showtimes */}
+            <motion.div
+              key={selectedDate}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-4"
+            >
+              {Object.keys(groupedByType).length === 0 ? (
+                <div className="bg-gray-900 rounded-xl shadow-md p-8 text-center border border-gray-800">
+                  <p className="text-gray-500">No hay funciones disponibles para esta fecha</p>
+                </div>
+              ) : (
+                Object.entries(groupedByType).map(([type, times]) => (
+                  <div key={type} className="bg-gray-900 rounded-xl shadow-xl shadow-black/20 overflow-hidden border border-gray-800">
+                    <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-6 py-3">
+                      <span className="font-bold text-sm uppercase tracking-wider">{type}</span>
+                    </div>
+                    <div className="p-5">
+                      <div className="flex flex-wrap gap-4">
+                        {times.map((showtime) => (
+                          <motion.button
+                            key={showtime.id}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleShowtimeSelect(showtime)}
+                            className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors group"
+                          >
+                            <Clock className="w-4 h-4 text-gray-600 group-hover:text-red-400" />
+                            <span className="text-lg font-bold">{showtime.time} p.m.</span>
+                            <span className="text-gray-600 text-sm">(Selecciona una tanda)</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </motion.div>
+          </>
+        )}
+
+        {movie.status === 'coming-soon' && (
+          <div className="bg-amber-900/20 border border-amber-700/30 rounded-xl p-6 text-center">
+            <p className="text-amber-400 text-lg">
               Esta película aún no está disponible. Estreno: {new Date(movie.releaseDate).toLocaleDateString('es-ES')}
             </p>
-          </div>
-        ) : movie.status === 'pre-release' && movieShowtimes.length === 0 ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-            <p className="text-blue-800 text-lg">
-              Pronto dispondremos de horarios para este preestreno
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {Object.entries(groupedByDate).map(([date, times]) => (
-              <div key={date} className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-purple-600" />
-                  {new Date(date).toLocaleDateString('es-ES', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {times.map((showtime) => (
-                    <motion.button
-                      key={showtime.id}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleShowtimeSelect(showtime)}
-                      className="border-2 border-purple-200 hover:border-purple-600 rounded-lg p-4 text-left transition-colors group"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-2xl font-bold text-purple-600 group-hover:text-purple-700">
-                          {showtime.time}
-                        </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          showtime.format === '3D' 
-                            ? 'bg-blue-100 text-blue-800' 
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {showtime.format}
-                        </span>
-                      </div>
-                      
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <p className="font-medium">{showtime.room}</p>
-                        <p>{showtime.language}</p>
-                        <p className="text-purple-600 font-semibold">${showtime.price} por entrada</p>
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            ))}
           </div>
         )}
       </div>
