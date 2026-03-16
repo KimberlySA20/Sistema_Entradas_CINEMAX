@@ -14,7 +14,7 @@ export const registerUser = async (name: string, email: string, password: string
   }
 
   const user = await User.create({ name, email, password });
-  const token = generateToken(user._id as string);
+  const token = generateToken(user._id.toString());
 
   return {
     user: {
@@ -37,7 +37,7 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error('Credenciales inválidas');
   }
 
-  const token = generateToken(user._id as string);
+  const token = generateToken(user._id.toString());
 
   return {
     user: {
