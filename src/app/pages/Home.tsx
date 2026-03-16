@@ -68,12 +68,12 @@ export const Home = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 border-b border-gray-800">
+        <div className="flex gap-1 mb-8 border-b border-gray-800 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${
+              className={`px-3 sm:px-6 py-3 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all relative whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'text-red-500'
                   : 'text-gray-500 hover:text-amber-400'
