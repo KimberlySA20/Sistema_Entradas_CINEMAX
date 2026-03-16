@@ -13,7 +13,7 @@ import { Navbar } from './components/Navbar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Navbar />
       {children}
     </div>

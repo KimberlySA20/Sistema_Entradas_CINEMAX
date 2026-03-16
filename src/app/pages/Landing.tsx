@@ -95,8 +95,8 @@ export const Landing = () => {
               className="cursor-pointer group"
             >
               <div className={`bg-gradient-to-br ${cinema.color} rounded-2xl p-8 shadow-2xl shadow-black/50 transition-all duration-300 relative overflow-hidden border border-white/10`}>
-                <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-20 -mt-20 group-hover:scale-150 transition-transform duration-700" />
-                <div className="absolute bottom-0 left-0 w-28 h-28 bg-black/10 rounded-full -ml-14 -mb-14 group-hover:scale-150 transition-transform duration-700" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
+                <div className="absolute -bottom-14 -left-14 w-28 h-28 bg-black/10 rounded-full group-hover:scale-150 transition-transform duration-700" />
 
                 <div className="relative z-10">
                   <div className="flex items-center justify-center mb-5">
